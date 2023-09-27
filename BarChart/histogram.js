@@ -24,7 +24,8 @@ var xAxis = d3.svg.axis()
 
 var yAxis = d3.svg.axis()
     .scale(y)
-    .orient("left");
+    .orient("left")
+    .tickFormat(d3.format(".0%"));
     
 var testArray = [6,1,8,5,2,7,4,3,9];
 var bardata=[];
@@ -34,6 +35,8 @@ var isAscending = true;
 var tooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
+
+var formatPercent = d3.format(".0%");
 
 d3.tsv("data.tsv", type, function(error, data) {
 
@@ -58,12 +61,12 @@ d3.tsv("data.tsv", type, function(error, data) {
         .data(bardata)
         .enter().append("rect")
         .attr("class", "bar")
-        .attr("x", function(d) { return x(d.name); })
+        .attr("x", function(d) { return x(d.name); }) 
         .attr("y", function(d) { return y(d.value); })
         .attr("height", function(d) { return height - y(d.value); })
         .attr("width", x.rangeBand())
         .on("mouseover", function(d){
-            d3.select(this).style("fill", "green");
+            d3.select(this).style("fill", "darkred");
     
             tooltip.transition()
                 .duration(200)
@@ -132,14 +135,14 @@ function updateChart() {
     chart.selectAll(".bar")
         .data(bardata)
         .transition()
-        .duration(500)
+        .duration(0)
         .attr("x", function(d) { return x(d.name); })
         .attr("y", function(d) { return y(d.value); })
         .attr("height", function(d) { return height - y(d.value); })
         
     chart.select(".xaxis")
         .transition()
-        .duration(500)
+        .duration(0)
         .call(xAxis);
 
 }
