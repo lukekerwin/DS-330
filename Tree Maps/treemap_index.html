@@ -10,10 +10,10 @@ svg {
 }
 
 </style>
-<svg width="960" height="570"></svg>
+<svg width="1000" height="570"></svg>
 <form>
-  <label><input type="radio" name="mode" value="sumBySize" checked> Size</label>
-  <label><input type="radio" name="mode" value="sumByCount"> Count</label>
+  <label><input type="radio" name="mode" value="sumBySize" checked> Revenue</label>
+  <label><input type="radio" name="mode" value="sumByCount"> Number</label>
 </form>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
@@ -32,7 +32,7 @@ var treemap = d3.treemap()
     .round(true)
     .paddingInner(1);
 
-d3.json("flare.json", function(error, data) {
+d3.json("tree.json", function(error, data) {
   if (error) throw error;
 
   var root = d3.hierarchy(data)
@@ -45,7 +45,7 @@ d3.json("flare.json", function(error, data) {
   var cell = svg.selectAll("g")
     .data(root.leaves())
     .enter().append("g")
-      .attr("transform", function(d) { return "translate(" + d.x0 + "," + d.y0 + ")"; });
+      .attr("transform", function(d) { return "translate(" + (d.x0+0) + "," + d.y0 + ")"; });
 
   cell.append("rect")
       .attr("id", function(d) { return d.data.id; })
@@ -87,7 +87,7 @@ d3.json("flare.json", function(error, data) {
 
     cell.transition()
         .duration(750)
-        .attr("transform", function(d) { return "translate(" + d.x0 + "," + d.y0 + ")"; })
+        .attr("transform", function(d) { return "translate(" + (d.x0+0) + "," + d.y0 + ")"; })
       .select("rect")
         .attr("width", function(d) { return d.x1 - d.x0; })
         .attr("height", function(d) { return d.y1 - d.y0; });
@@ -95,11 +95,11 @@ d3.json("flare.json", function(error, data) {
 });
 
 function sumByCount(d) {
-  return d.children ? 0 : 1;
+  return d.number;
 }
 
 function sumBySize(d) {
-  return d.size;
+  return d.revenue;
 }
 
 </script>
